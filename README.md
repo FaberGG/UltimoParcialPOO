@@ -1,5 +1,5 @@
-# UltimoParcialPOO
+# UltimoParcialLabPOO
 ## Descripcion
 Proyecto hecho por:
-  Edward Esteban Davila Salazar,
-  John Faber Navia Narvaez
+  John Faber Navia Narvaez, Edward Esteban Davila Salazar
+  
