@@ -11,6 +11,9 @@ import java.util.Date;
  * @author IngSis
  */
 public class Prestamo {
+
     private Date fechaInicio;
     private Date fechaFin;
+    private Multa multa;
+
 }

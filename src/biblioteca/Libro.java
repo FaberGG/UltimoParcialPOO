@@ -4,6 +4,8 @@
  */
 package biblioteca;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author IngSis
@@ -15,7 +17,15 @@ public class Libro {
     private String editorial;
     private String año;
 
-    arrayList <Autor> Autores = new arrayList<>{
-    
+    ArrayList<Autor> autores;
+    ArrayList<Copia> copias;
+
+    public Libro(String nombre, String tipo, String editorial, String año) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.editorial = editorial;
+        this.año = año;
+        this.copias = new ArrayList<>();
+        this.autores = new ArrayList<>();
     }
 }

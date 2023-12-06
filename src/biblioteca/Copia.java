@@ -4,6 +4,8 @@
  */
 package biblioteca;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author IngSis
@@ -11,7 +13,10 @@ package biblioteca;
 public class Copia {
     private int identificador;
     private String estado;
+    private Libro libro;
     
+    private Lector lector;
+
     public void devolver(){
         System.out.println("");
     }

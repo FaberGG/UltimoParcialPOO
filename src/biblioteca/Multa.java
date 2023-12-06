@@ -4,10 +4,19 @@
  */
 package biblioteca;
 
+import java.util.Date;
+
 /**
  *
  * @author IngSis
  */
-public class Multa extends Prestamo{
-    
+public class Multa extends Prestamo {
+
+    private Date fechaInicio;
+    private Date fechaFin;
+    private Lector lector;
+    private Prestamo prestamo;
+    public void calcularFechaFin(){
+        
+    }
 }
