@@ -67,20 +67,25 @@ Este es un proyecto de biblioteca en Java con Spark para el manejo de libros, le
 - **URL:** [http://localhost:4567/prestamos](http://localhost:4567/prestamos)
 - **Descripción:** Devuelve información sobre todos los préstamos en formato JSON.
 
-### Actualizar Multas y Mostrar Información (HTML)
+### Actualizar Multas (HTML)
 
 - **URL:** [http://localhost:4567/actualizarMultas](http://localhost:4567/actualizarMultas)
-- **Descripción:** Actualiza multas pendientes para cada lector y muestra información en formato HTML.
+- **Descripción:** Actualiza multas pendientes para cada lector.
 
 ### Pagar Multas (HTML)
 
 - **URL:** [http://localhost:4567/pagarMultas/html](http://localhost:4567/pagarMultas/html)
 - **Descripción:** Permite pagar multas seleccionando un lector.
 
-### Realizar Pago de Multa (POST)
+### Guardar Lectores (HTML)
 
-- **URL:** [http://localhost:4567/pagarMulta](http://localhost:4567/pagarMulta)
-- **Descripción:** Maneja el pago de una multa mediante una solicitud POST.
+- **URL:** [http://localhost:4567/lectores/guardar](http://localhost:4567/lectores/guardar)
+- **Descripción:** Permite guardar en formato json la informacion de los lectores ingresada en un archivo json en el repositorio, esta información sera cargada al inicio de la ejeccion.
+
+### vaciar lectores (HTML)
+
+- **URL:** [http://localhost:4567/lectores/vaciar](http://localhost:4567/lectores/vaciar)
+- **Descripción:** Permite vaciar todos los lectores añadodos hasta el momento del programa y del archivo json.
 
 
 
@@ -89,10 +94,15 @@ Este es un proyecto de biblioteca en Java con Spark para el manejo de libros, le
 ## Acciones para Demostrar el Funcionamiento
 
 1. Accede al endpoint [http://localhost:4567/lectores/html](http://localhost:4567/lectores/html) para visualizar la lista de lectores y agregar un nuevo lector.
-2. Realiza préstamos y devoluciones utilizando los endpoints [http://localhost:4567/prestamo/html](http://localhost:4567/prestamo/html) y [http://localhost:4567/devolucion/html](http://localhost:4567/devolucion/html).
-3. Obtén información sobre todos los préstamos con el endpoint [http://localhost:4567/prestamos](http://localhost:4567/prestamos).
-4. Accede al endpoint [http://localhost:4567/actualizarMultas](http://localhost:4567/actualizarMultas) para actualizar multas y mostrar información en formato HTML.
-5. Paga una multa utilizando el formulario en el endpoint [http://localhost:4567/pagarMultas/html](http://localhost:4567/pagarMultas/html).
+2. Visualizar la informacion de los lectores añadidos en el paso anterior [http://localhost:4567/lectores/json](http://localhost:4567/lectores/json).
+3. Realiza préstamos y devoluciones utilizando los endpoints [http://localhost:4567/prestamo/html](http://localhost:4567/prestamo/html) y [http://localhost:4567/devolucion/html](http://localhost:4567/devolucion/html).
+4. Obtén información sobre todos los préstamos con el endpoint [http://localhost:4567/prestamos](http://localhost:4567/prestamos).
+5. Accede al endpoint [http://localhost:4567/actualizarMultas](http://localhost:4567/actualizarMultas) para actualizar multas.
+6. Paga una multa utilizando el formulario en el endpoint [http://localhost:4567/pagarMultas/html](http://localhost:4567/pagarMultas/html) (solo funciona en caso de que al actualizar una multa se haya generado una, es decir que se haya vencido el prestamo para un lector).
+7. guarda la informacion de los lectores añadidos accediendo al endpoint [http://localhost:4567/lectores/guardar](http://localhost:4567/lectores/guardar).
+8. Deten la ejecucion del proyecto y accede al enpoint [http://localhost:4567/lectores/json](http://localhost:4567/lectores/json) para comprobar la informacion de los lectores guardados.
+9. accede al endpoint [http://localhost:4567/lectores/vaciar](http://localhost:4567/lectores/vaciar) para eliminar toda la informacion de los lectores, tanto del programa en ejecución como del archivo json de respaldo.
+10. accede al enpoint [http://localhost:4567/lectores/json](http://localhost:4567/lectores/json) para comprobar que se hayan eliminado todos los lectores del programa.
 
 
 
