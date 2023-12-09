@@ -5,19 +5,28 @@ package biblioteca;
 
 import static spark.Spark.*;
 import com.google.gson.*;
-import java.util.Random;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
+import java.util.Random;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BibliotecaParcial {
 
-    public static void main(String[] args) {
-        Gson gson = new Gson();
+    private static final String LECTORES_FILE = "lectores.json";
 
-        //se crea la lista de libros
+    private static final Gson gson = new Gson();
+
+    public static void main(String[] args) {
+
+        // Cargar lectores y libros al iniciar el programa
+        ArrayList<Lector> lectores = cargarLectores();
         ArrayList<Libro> libros = new ArrayList<>();
-        //se crea la lista de lectores
-        ArrayList<Lector> lectores = new ArrayList<>();
 
         // se crea objetos Autor
         Autor jkRowling = new Autor("J.K. Rowling", "Reino Unido", "31 de julio de 1965");
@@ -43,7 +52,7 @@ public class BibliotecaParcial {
         libros.add(t1984);
 
         // crea el objeto lector por defecto
-        Lector lectorDefecto = new Lector(1, "Alfred", "K.J", "Boston 023");
+        Lector lectorDefecto = new Lector(1, "alfredo", "castillos", "Boston 023");
         lectores.add(lectorDefecto);
 
         // Por defecto 
@@ -146,7 +155,6 @@ public class BibliotecaParcial {
                     break;
                 }
             }
-
             Libro libroSeleccionado = null;
             for (Libro libro : libros) {
                 if (libro.getNombre().equals(tituloLibro)) {
@@ -185,7 +193,7 @@ public class BibliotecaParcial {
                 for (Copia copia : lector.getCopias()) {
                     html.append("<option value='").append(copia.getIdentificador()).append("'>")
                             .append("Libro: ").append(copia.getLibro().getNombre())
-                            .append(", Copia: ").append(copia.getIdentificador())
+                            .append(", ID Copia: ").append(copia.getIdentificador())
                             .append(", Lector: ").append(lector.getNombreCompleto()).append("</option>");
                 }
             }
@@ -226,10 +234,99 @@ public class BibliotecaParcial {
             }
             return null;
         });
-        
-        
-        
 
+        // Ruta para obtener información de todos los préstamos
+        get("/prestamos", (req, res) -> {
+            res.type("application/json");
+
+            // Lista para almacenar la información de los préstamos
+            List<Map<String, Object>> prestamosInfo = new ArrayList<>();
+
+            for (Lector lector : lectores) {
+                for (Copia copia : lector.getCopias()) {
+                    Prestamo prestamo = copia.getPrestamo();
+                    if (prestamo != null) {
+                        Map<String, Object> info = new HashMap<>();
+                        info.put("lector", lector.getNombreCompleto());
+                        info.put("libro", copia.getLibro().getNombre());
+                        info.put("fecha_inicio", prestamo.getFechaInicio());
+                        info.put("fecha_fin", prestamo.getFechaFin());
+                        prestamosInfo.add(info);
+                    }
+                }
+            }
+
+            return gson.toJson(prestamosInfo);
+        });
+
+        // Ruta para actualizar multas y mostrar información
+        get("/actualizarMultas", (req, res) -> {
+            res.type("text/html");
+            String html = "<html><body><h1>Multas Actualizadas</h1>";
+            // Comprobar multas pendientes para cada lector
+            for (Lector lector : lectores) {
+                lector.comprobarMultasPendientes();
+            }
+            return html;
+        });
+        // Ruta para pagar multas
+        get("/pagarMultas/html", (req, res) -> {
+            res.type("text/html");
+            StringBuilder html = new StringBuilder("<html><body><h1>PAGAR MULTAS</h1>");
+
+            // Boton para pagar una multa
+            html.append("<form method='post' action='/pagarMulta'>");
+            html.append("<label for='lectorPago'>Seleccione un lector para pagar la multa:</label>");
+            html.append("<select name='lectorPago'>");
+            for (Lector lector : lectores) {
+                html.append("<option value='").append(lector.getNumSocio()).append("'>")
+                        .append(lector.getNombreCompleto()).append("</option>");
+            }
+            html.append("</select>");
+            html.append("<input type='submit' value='Pagar Multa'>");
+            html.append("</form>");
+            html.append("</body></html>");
+            return html.toString();
+        });
+        // Ruta para manejar el pago de una multa
+        post("/pagarMulta", (req, res) -> {
+            int numSocio = Integer.parseInt(req.queryParams("lectorPago"));
+
+            // Buscar lector correspondiente
+            Lector lectorSeleccionado = null;
+            for (Lector lector : lectores) {
+                if (lector.getNumSocio() == numSocio) {
+                    lectorSeleccionado = lector;
+                    break;
+                }
+            }
+
+            // Pagar la multa
+            if (lectorSeleccionado != null && lectorSeleccionado.getPrestamo() != null
+                    && lectorSeleccionado.getPrestamo().getMulta() != null) {
+                //simulo el pago eliminando la multa del lector
+                lectorSeleccionado.getPrestamo().setMulta(null);
+                res.redirect("/actualizarMultas/?mensaje=Multa pagada exitosamente");
+
+            } else {
+                res.redirect("/actualizarMultas/?mensaje=Error al pagar la multa");
+            }
+            return null;
+        });
+
+        // Endpoint para guardar la información de los lectores
+        get("/lectores/guardar", (req, res) -> {
+            // Guardar la información de los lectores en el archivo
+            guardarLectores(lectores);
+            return "Información de lectores guardada exitosamente.";
+        });
+        //endpiont para vaciar el contenido del json
+        get("/lectores/vaciar", (req, res) -> {
+            ArrayList<Lector> lectoresVacios = new ArrayList<>();
+            guardarLectores(lectoresVacios);
+            lectores.clear();
+            return "Contenido del archivo JSON vaciado exitosamente.";
+        });
     }
 
     //metodo para crear copias de un libro
@@ -242,6 +339,31 @@ public class BibliotecaParcial {
             copias.add(copia);
         }
         return copias;
+    }
+
+    //persistencia para lectores
+    public static void guardarLectores(ArrayList<Lector> lectores) {
+        try (FileWriter writer = new FileWriter(LECTORES_FILE)) {
+            gson.toJson(lectores, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Lector> cargarLectores() {
+        File lectoresFile = new File(LECTORES_FILE);
+
+        if (!lectoresFile.exists()) {
+            // Si el archivo no existe, retorna una lista vacía
+            return new ArrayList<>();
+        }
+
+        try (FileReader reader = new FileReader(lectoresFile)) {
+            return gson.fromJson(reader, ArrayList.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 }

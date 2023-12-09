@@ -12,7 +12,6 @@ import java.util.Date;
  * @author IngSis
  */
 public class Copia {
-
     private int identificador;
     private String estado;
     private Libro libro;
@@ -29,6 +28,7 @@ public class Copia {
         if ("NoPrestado".equals(estado)) {
             estado = "prestado";
             this.prestamo = new Prestamo(new Date());
+            lector.setPrestamo(prestamo);
             setLector(lector);
             lector.agregarCopia(this);
         }
@@ -37,6 +37,7 @@ public class Copia {
     public void devolver() {
         if ("prestado".equals(estado)) {
             this.lector.removerCopia(this);
+            this.lector.setPrestamo(null);
             estado = "NoPrestado";
             this.prestamo = null;
             setLector(null);

@@ -18,7 +18,7 @@ public class Lector {
     private String direccion;
 
     private ArrayList<Copia> copias;
-    private Multa multa;
+    private Prestamo prestamo;
 
     public Lector(int numSocio, String nombre, String apellidos, String direccion) {
         this.numSocio = numSocio;
@@ -39,9 +39,25 @@ public class Lector {
     }
 
     public void comprobarMultasPendientes() {
-        
+        for (Copia copia : copias) {
+            Prestamo prestamoActual = copia.getPrestamo();
+            //comprueba que el prestamo esta vencido
+            if (prestamoActual != null && prestamoActual.estaVencido()) {
+                prestamoActual.generarMulta();
+            }
+        }
     }
-    public String getNombreCompleto(){
+
+    //setters y getters
+    public void setPrestamo(Prestamo prestamo) {
+        this.prestamo = prestamo;
+    }
+
+    public Prestamo getPrestamo() {
+        return prestamo;
+    }
+
+    public String getNombreCompleto() {
         return nombre + " " + apellidos;
     }
 
@@ -64,9 +80,4 @@ public class Lector {
     public ArrayList<Copia> getCopias() {
         return copias;
     }
-
-    public Multa getMulta() {
-        return multa;
-    }
-    
 }

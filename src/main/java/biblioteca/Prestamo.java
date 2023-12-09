@@ -22,11 +22,11 @@ public class Prestamo {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date calcularFechaFin() {
+    public void calcularFechaFin() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fechaInicio);
         calendar.add(Calendar.DAY_OF_MONTH, CONST_PLAZO_DEVOLVER);
-        return calendar.getTime();
+        fechaFin = calendar.getTime();
     }
 
     public Multa generarMulta() {
@@ -34,4 +34,27 @@ public class Prestamo {
         this.multa = nuevaMulta;
         return nuevaMulta;
     }
+
+    public boolean estaVencido() {
+        Date fechaActual = new Date();
+        return fechaActual.after(fechaFin);
+    }
+
+    public Multa getMulta() {
+        return multa;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setMulta(Multa multa) {
+        this.multa = multa;
+    }
+    
+    
 }
