@@ -6,7 +6,7 @@ Proyecto hecho por:
 Este es un proyecto de biblioteca en Java con Spark para el manejo de libros, lectores, préstamos y devoluciones. A continuación, se detallan los endpoints disponibles y las acciones para demostrar el funcionamiento del programa.
 
 ##Diagrama
-![Diagrama de Proceso](https://github.com/FaberGG/UltimoParcialPOO/Diagrama%20de%20proceso.png)
+![Diagrama de Proceso](https://github.com/FaberGG/UltimoParcialPOO/blob/main/Diagrama%20de%20proceso.png)
 ## respuesta a la pregunta planteada
 Este diagrama refleja la complejidad del flujo de ejecución, incluyendo la interacción entre las diferentes funcionalidades como préstamos, devoluciones, actualización de multas y pago de multas. La complejidad puede ser confusa para un usuario final porque implica una variedad de operaciones y formularios que deben comprenderse y utilizarse correctamente. Además, la gestión de multas y la persistencia de datos pueden añadir capas de complejidad que pueden resultar confusas para alguien que no esté familiarizado con la lógica interna del sistema.
 ## Requisitos
